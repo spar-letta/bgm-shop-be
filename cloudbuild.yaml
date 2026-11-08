@@ -1,0 +1,13 @@
+steps:
+  - name: maven:3.9-eclipse-temurin-17
+    entrypoint: mvn
+    args: ["-q", "-DskipTests", "package"]
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - europe-west1-docker.pkg.dev/$PROJECT_ID/bgm-shop/be:latest
+      - .
+images:
+  - europe-west1-docker.pkg.dev/$PROJECT_ID/bgm-shop/be:latest
+timeout: 1800s
