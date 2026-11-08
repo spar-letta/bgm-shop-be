@@ -1,0 +1,142 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    show-sql: true
+  datasource:
+    driverClassName: org.h2.Driver
+    password: sa
+    username: sa
+    url: jdbc:h2:mem:itibari-test-${random.uuid};DB_CLOSE_DELAY=-1
+  liquibase:
+    change-log: classpath:/test-liquibase.change-log.xml
+    clear-checksums: true
+  h2:
+    console:
+      path: /h2-console
+      enabled: 'true'
+  sql:
+    init:
+      continue-on-error: true
+      data-locations: classpath:my-data.sql
+
+
+  cloud:
+    gc:
+      storage:
+        credentials:
+          location: classpath:/gcp-credentials-prod.json
+      bucket:
+        name: itibari-bucket-prd
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      #      schema: always
+      initialize-schema: always
+  profiles:
+    active: local
+logging:
+  level:
+    com.google.cloud: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+      springframework:
+        cloud: DEBUG
+        integration: DEBUG
+    root: info
+
+
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M \(%line\)
+      - %msg%n'
+customer-app-download-stats:
+  google-play:
+    enabled: ${CUSTOMER_APP_DOWNLOAD_STATS_IMPORT_ENABLED:false}
+    bucket: ${CUSTOMER_APP_DOWNLOAD_STATS_BUCKET:pubsite_prod_7360692091076360515}
+    installs-prefix: ${CUSTOMER_APP_DOWNLOAD_STATS_INSTALLS_PREFIX:stats/installs/}
+    package-name: ${CUSTOMER_APP_DOWNLOAD_STATS_PACKAGE_NAME:io.itibari.customer}
+    start-month: ${CUSTOMER_APP_DOWNLOAD_STATS_START_MONTH:JANUARY}
+
+africastalking:
+  username: itibari
+  apiKey: atsk_fe3e300249974f6f7e2bb40b6d9930901f7ecef48bcc2d2126ea0dd6039ad8bfe9ea9341
+  senderId: Itibari
+
+security:
+  jwt:
+    key-store:
+      path: classpath:keys/keystore.jks
+      password: ${KEY_STORE_PASSWORD:ITIBARI}
+      key-alias: itibari-jwt-key
+      private-key-passphrase: ${PRIVATE_KEY_PASSPHRASE:ITIBARI}
+
+
+da:
+  app:
+    version: 1.0.0
+
+sa:
+  app:
+    version: 2.0.0
+
+
+# instructions for tra integration test, these values will be used in the test and should be set in the environment variables before running the tests
+# 1. create a application-local.yaml file in the src/test/resources directory with the following content:
+# 2. set the environment variables for the tra integration test, these values will be used in the test and should be set in the environment variables before running the tests
+#    - TRA_BASE_URL: the base url of the tra integration, e.g. https://api.tra.com/v1 etc
+# 3. add it to .gitignore file to avoid committing it to the repository
+# 4. run the tests, the tra integration test will use the values from the application-local.yaml file and the environment variables to perform the integration test with the tra system
+
+tra:
+  integration:
+    base-url: ${TRA_BASE_URL}
+    receipt-endpoint: ${TRA_RECEIPT_ENDPOINT}
+  branch: ${TRA_BRANCH}
+  department: ${TRA_DEPARTMENT}
+  device-number: ${TRA_DEVICE_NUMBER}
+  customer-id-type: ${TRA_CUSTOMER_ID_TYPE}
+  pay-type: ${TRA_PAY_TYPE}
+  fcode: ${TRA_FCODE}
+  fcode-token: ${TRA_FCODE_TOKEN}
+  invoice-prefix: ${TRA_INVOICE_PREFIX}
+
+notification:
+  emails: ${NOTIFICATION_EMAILS:' '}  # comma-separated list of email addresses
+
+yeastar:
+  pbx:
+    url: ${YEASTAR_PBX_URL:https://your-pbx.yeastarcloud.com}
+    access-id: ${YEASTAR_ACCESS_ID:FAKE_ACCESS_ID}
+    access-key: ${YEASTAR_ACCESS_KEY:FAKE_ACCESS_KEY}
+    token-refresh-buffer-seconds: ${YEASTAR_TOKEN_REFRESH_BUFFER:300}
+    default-extension: ${YEASTAR_DEFAULT_EXTENSION:10006}
+
+beem:
+  api:
+    key: ${BEEM_API_KEY:716a7fa2f0cd70a4}
+    secret: ${BEEM_API_SECRET:OWZiMWY3ZDAzMzFmOTMzODhiMTA0YmI0MzBhZmEyN2FmNjBmZmFlNzAwOGUyNjAxMjE5ODYzODg1YzVkMzY5NQ==}
+  sender:
+    id: ${BEEM_SENDER_ID:Itibari}
+  choice: ${BEEM_CHOICE:false}
+
+
+whatsAppDetails:
+  phoneNumberId: eee
+  accessToken: jj
+  callBackAccessToken: Coffee$Rain!Books_2026
+  firstContactTemplate: new_message
+  firstContactTemplateLanguage: en
+  firstContactTemplateParameterName: 1
+  broadcastTemplate: group_text
+  broadcastTemplateLanguage: en
+  broadcastTemplateParameterName: 1
+
+bnpl:
+  app-link: ${BNPL_APP_LINK:test}

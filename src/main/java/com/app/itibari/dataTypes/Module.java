@@ -1,0 +1,33 @@
+package com.app.itibari.dataTypes;
+
+public enum Module {
+    Logistics,
+    Inventory,
+    Procurement,
+    Sales,
+    Finance,
+    HumanResources,
+    Warehouse,
+    AutomaticVanSaleRejectionCode,
+    System,
+    Customer,
+    BnplCustomerFeedback,
+    BnplBlacklistReason,
+    BnplWhitelistReason,
+    BnplCustomerLimitReviewReason,
+    BnplPaymentReversalReason,
+    LocationApprovalRejectionCode,
+    LocationRejectionCode,
+    LocationApprovalCode,
+    Crm_CS_Notes,
+    PurchaseOrder,
+    ApprovePoRefund,
+    RejectPoRefund,
+    ApproveAmendment,
+    RejectAmendment,
+    ReconRevertReason,
+    Bnpl_Crm_Notes,
+    TransferRouteOrders,
+    Customer_Return,
+    DeliveryAgentAvailability
+}

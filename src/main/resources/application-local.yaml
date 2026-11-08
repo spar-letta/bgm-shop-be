@@ -1,0 +1,101 @@
+# Activate with: --spring.profiles.active=local
+# Prefer BE/.env.local (or scripts/run-be-local.sh) for secrets/DB overrides.
+server:
+  port: ${SERVER_PORT:8081}
+
+# Seeded on every local boot by LocalAdminBootstrapRunner
+itibari:
+  local-admin:
+    enabled: ${LOCAL_ADMIN_ENABLED:true}
+    email: ${LOCAL_ADMIN_EMAIL:admin@itibari.local}
+    password: ${LOCAL_ADMIN_PASSWORD:Admin@123}
+    first-name: ${LOCAL_ADMIN_FIRST_NAME:Local}
+    last-name: ${LOCAL_ADMIN_LAST_NAME:Admin}
+    phone: ${LOCAL_ADMIN_PHONE:+255700000001}
+  storage:
+    local:
+      # Avoid real GCS in local/dev; receipts & uploads land on disk instead.
+      enabled: ${LOCAL_STORAGE_ENABLED:true}
+      path: ${LOCAL_STORAGE_PATH:${user.home}/.itibari-local-storage}
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5433}/${DATABASE_NAME:itibari_db}
+    username: ${DATABASE_USER:itibari}
+    password: ${DATABASE_PASSWORD:itibari}
+  liquibase:
+    change-log: classpath:/db/changelog/liquibase.change-log.xml
+    liquibase-schema: public
+    default-schema: public
+  cloud:
+    gc:
+      storage:
+        credentials:
+          location: ${RESOURCE_PATH:classpath:/gcp-credentials.json}
+      bucket:
+        name: ${GCP_BUCKET_NAME:itibari-local}
+  batch:
+    job:
+      enabled: false
+
+customer-app-download-stats:
+  google-play:
+    enabled: false
+
+africastalking:
+  username: ${AFRICASTALKING_USERNAME:sandbox}
+  apiKey: ${AFRICASTALKING_API_KEY:local-dummy-key}
+  senderId: ${AFRICASTALKING_SENDER_ID:Itibari}
+
+beem:
+  api:
+    key: ${BEEM_API_KEY:local}
+    secret: ${BEEM_API_SECRET:local}
+  sender:
+    id: ${BEEM_SENDER_ID:Itibari}
+  choice: ${BEEM_CHOICE:false}
+
+security:
+  jwt:
+    key-store:
+      path: classpath:keys/keystore.jks
+      password: ${KEY_STORE_PASSWORD:ITIBARI}
+      key-alias: itibari-jwt-key
+      private-key-passphrase: ${PRIVATE_KEY_PASSPHRASE:ITIBARI}
+
+da:
+  app:
+    version: ${DA_APP_VERSION:1.0.0}
+
+sa:
+  app:
+    version: ${SA_APP_VERSION:1.0.0}
+
+bnpl:
+  app-link: ${BNPL_APP_LINK:https://play.google.com/store/search?q=itibari&c=apps&hl=en}
+
+tra:
+  integration:
+    base-url: ${TRA_BASE_URL:http://localhost}
+    receipt-endpoint: ${TRA_RECEIPT_ENDPOINT:/receipt}
+  branch: ${TRA_BRANCH:LOCAL}
+  department: ${TRA_DEPARTMENT:LOCAL}
+  device-number: ${TRA_DEVICE_NUMBER:0}
+  customer-id-type: ${TRA_CUSTOMER_ID_TYPE:1}
+  pay-type: ${TRA_PAY_TYPE:1}
+  fcode: ${TRA_FCODE:LOCAL}
+  fcode-token: ${TRA_FCODE_TOKEN:LOCAL}
+  invoice-prefix: ${TRA_INVOICE_PREFIX:LOC}
+
+notification:
+  emails: ${NOTIFICATION_EMAILS:local@itibari.io}
+
+logging:
+  level:
+    root: info
+    com.app.itibari: debug

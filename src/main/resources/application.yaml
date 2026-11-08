@@ -1,0 +1,137 @@
+server:
+  max-http-request-header-size: 150000
+  http2:
+    enabled: false
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  application:
+    name: itibari-service
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        event:
+          merge:
+            entity_copy_observer: allow
+      jdbc:
+        time_zone: Africa/Nairobi
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      isolation: READ_COMMITTED
+      maximumPoolSize: 10
+  liquibase:
+    change-log: 'classpath:/db/changelog/liquibase.change-log.xml'
+    database-change-log-lock-table: health-lock
+    database-change-log-table: health-changelog
+  sql:
+    init:
+      platform: postgres
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      schema: always
+      initialize-schema: always
+  cloud:
+    gc:
+      storage:
+        credentials:
+          location: ${RESOURCE_PATH}
+      bucket:
+        name: ${GCP_BUCKET_NAME}
+
+customer-app-download-stats:
+  google-play:
+    enabled: ${CUSTOMER_APP_DOWNLOAD_STATS_IMPORT_ENABLED:true}
+    bucket: ${CUSTOMER_APP_DOWNLOAD_STATS_BUCKET:pubsite_prod_7360692091076360515}
+    installs-prefix: ${CUSTOMER_APP_DOWNLOAD_STATS_INSTALLS_PREFIX:stats/installs/}
+    package-name: ${CUSTOMER_APP_DOWNLOAD_STATS_PACKAGE_NAME:io.itibari.customer}
+    start-month: ${CUSTOMER_APP_DOWNLOAD_STATS_START_MONTH:JANUARY}
+
+africastalking:
+  username: ${AFRICASTALKING_USERNAME}
+  apiKey: ${AFRICASTALKING_API_KEY}
+  senderId: ${AFRICASTALKING_SENDER_ID}
+
+beem:
+  api:
+    key: ${BEEM_API_KEY}
+    secret: ${BEEM_API_SECRET}
+  sender:
+    id: ${BEEM_SENDER_ID}
+
+  choice: ${BEEM_CHOICE}
+
+# RSA Key Configuration
+security:
+  jwt:
+    key-store:
+      path: classpath:keys/keystore.jks
+      password: ${KEY_STORE_PASSWORD}
+      key-alias: itibari-jwt-key
+      private-key-passphrase: ${PRIVATE_KEY_PASSPHRASE}
+
+# Logging configuration
+logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M \(%line\)
+      - %msg%n'
+  level:
+    root: info
+da:
+  app:
+    version: ${DA_APP_VERSION}
+
+sa:
+  app:
+    version: ${SA_APP_VERSION}
+
+bnpl:
+  app-link: ${BNPL_APP_LINK:'https://play.google.com/store/search?q=itibari&c=apps&hl=en'}
+
+tra:
+  integration:
+    base-url: ${TRA_BASE_URL}
+    receipt-endpoint: ${TRA_RECEIPT_ENDPOINT}
+  branch: ${TRA_BRANCH}
+  department: ${TRA_DEPARTMENT}
+  device-number: ${TRA_DEVICE_NUMBER}
+  customer-id-type: ${TRA_CUSTOMER_ID_TYPE}
+  pay-type: ${TRA_PAY_TYPE}
+  fcode: ${TRA_FCODE}
+  fcode-token: ${TRA_FCODE_TOKEN}
+  invoice-prefix: ${TRA_INVOICE_PREFIX}
+
+
+notification:
+  emails: ${NOTIFICATION_EMAILS}  # comma-separated list of email addresses
+
+yeastar:
+  pbx:
+    url: ${YEASTAR_PBX_URL:https://itibari.ras.yeastar.com/}
+    access-id: ${YEASTAR_ACCESS_ID:ZLoGk0FaFV9nmGeki020OhXrFBDqu8Nc}
+    access-key: ${YEASTAR_ACCESS_KEY:KaEmTQuNQkWNumfQrofBGXYeUtfJAS1j}
+    token-refresh-buffer-seconds: ${YEASTAR_TOKEN_REFRESH_BUFFER:300}
+    default-extension: ${YEASTAR_DEFAULT_EXTENSION:1001}
+
+whatsAppDetails:
+  phoneNumberId: 1036291116239726
+  accessToken: EAAL4R26lqJIBRvJnENzG5yy13WWJVhhE7JKUyXkVqRVFGaRi1CqxzaUlnA06k38aH6tMAlVylBmLmUy4NRnnomf597sRnx5fyjBIZBdma8ziqnHKZACXUvzSZC730AY1J5EIYlAEercrL3YT7SkKNUAmmXFZCeS63WROCHmrG8AtGnN93IBO52gzqEC1AbYWsgZDZD
+  callBackAccessToken: Coffee$Rain!Books_2026
+  firstContactTemplate: ${WHATSAPP_FIRST_CONTACT_TEMPLATE:new_message}
+  firstContactTemplateLanguage: ${WHATSAPP_FIRST_CONTACT_TEMPLATE_LANGUAGE:en}
+  firstContactTemplateParameterName: ${WHATSAPP_FIRST_CONTACT_TEMPLATE_PARAMETER_NAME:1}
+  broadcastTemplate: ${WHATSAPP_BROADCAST_TEMPLATE:group_text}
+  broadcastTemplateLanguage: ${WHATSAPP_BROADCAST_TEMPLATE_LANGUAGE:en}
+  broadcastTemplateParameterName: ${WHATSAPP_BROADCAST_TEMPLATE_PARAMETER_NAME:1}
